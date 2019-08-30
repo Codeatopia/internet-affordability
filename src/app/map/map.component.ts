@@ -4,7 +4,6 @@ import * as L from "leaflet";
 import * as topojson from "topojson-client";
 import { Topology } from "topojson-specification";
 import { Feature, Geometry } from "geojson";
-import colors from "./map.component.scss";
 
 @Component({
   selector: "app-map",
