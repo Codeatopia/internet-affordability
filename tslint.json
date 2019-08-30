@@ -1,5 +1,6 @@
 {
   "extends": ["tslint:latest", "tslint-config-prettier"],
+  "defaultSeverity": "warning",
   "rules": {
     "ordered-imports": false,
     "object-literal-sort-keys": false,
@@ -7,6 +8,7 @@
     "no-submodule-imports": false,
     "member-access": false,
     "no-console": false,
-    "no-implicit-dependencies": false
+    "no-implicit-dependencies": false,
+    "no-object-literal-type-assertion": false
   }
 }
