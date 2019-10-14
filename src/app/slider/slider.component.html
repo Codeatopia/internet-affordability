@@ -1,0 +1,27 @@
+<div id="sliderContainer">
+  <div id="sliderLegend">
+    <div *ngFor="let marker of markers" class="marker">
+      <div
+        class="marker-tick"
+        [style.left]="(100 * marker) / sliderOptions.max + '%'"
+      >
+        .
+      </div>
+      <div
+        class="marker-label"
+        [ngStyle]="{ left: (100 * marker) / sliderOptions.max + '%' }"
+      >
+        ${{ marker }}
+      </div>
+    </div>
+  </div>
+  <mat-slider
+    id="slider"
+    [(ngModel)]="sliderValue"
+    [max]="sliderOptions.max"
+    [min]="sliderOptions.min"
+    [step]="sliderOptions.step"
+    [thumbLabel]="sliderOptions.thumbLabel"
+    (change)="onSliderChange($event)"
+  ></mat-slider>
+</div>

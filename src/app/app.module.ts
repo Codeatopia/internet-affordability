@@ -9,10 +9,13 @@ import { LeafletModule } from "@asymmetrik/ngx-leaflet";
 import { environment } from "../environments/environment";
 import { HomeComponent } from "./home/home.component";
 import { MapComponent } from "./map/map.component";
+import { SliderComponent } from "./slider/slider.component";
 import { HttpClientModule } from "@angular/common/http";
+import { MaterialModule } from "./material.module";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, MapComponent],
+  declarations: [AppComponent, HomeComponent, MapComponent, SliderComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -21,7 +24,10 @@ import { HttpClientModule } from "@angular/common/http";
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
     }),
-    LeafletModule.forRoot()
+    MaterialModule,
+    LeafletModule.forRoot(),
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

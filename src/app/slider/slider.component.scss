@@ -1,0 +1,44 @@
+#sliderContainer {
+  width: 80%;
+  margin: auto;
+}
+#slider {
+  width: 100%;
+  padding: 0;
+  margin-top: 30px;
+}
+#sliderLegend {
+  // slider is naturally offset 8px so adjust label
+  margin: 0 8px;
+  position: relative;
+}
+.marker {
+  margin-top: 30px;
+  position: absolute;
+  width: 100%;
+}
+.marker-tick,
+.marker-label {
+  position: relative;
+}
+.marker-tick {
+  width: 4px;
+  margin-left: -2px;
+  background: #727272;
+  color: #727272;
+}
+.marker-label {
+  width: 50px;
+  text-align: center;
+  margin-left: -25px;
+  top: -40px;
+}
+
+@media only screen and (max-width: 500px) {
+  #sliderContainer {
+    width: 100%;
+  }
+  .marker-label {
+    display: none;
+  }
+}
