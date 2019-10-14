@@ -1,0 +1,11 @@
+// helper function to avoid map-get calls (no really required, but for reference)
+// https://codepen.io/jakealbaugh/post/using-sass-functions-to-access-complex-variable-maps
+// take base and variant, with default option
+@function color($base, $variant: 500) {
+  @if map-has-key($base, $variant) {
+    @return map-get($base, $variant);
+  }
+  @return map-get($primary, 500);
+}
+
+// https://sass-lang.com/documentation/variables

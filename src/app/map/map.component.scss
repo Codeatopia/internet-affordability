@@ -1,5 +1,10 @@
+@import "src/styles.scss";
+
 :host {
   height: 100%;
+}
+.leaflet-container {
+  background: color($light, 500);
 }
 $outline1: #b5b5b5;
 $outline2: #b5b5b5;

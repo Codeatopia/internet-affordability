@@ -80,7 +80,8 @@ export class MapComponent {
   }
 
   private _getFillColor(c: number) {
-    return c > 10 ? "red" : c > 20 ? "blue" : c > 30 ? "green" : "red";
+    console.log("get fill", c);
+    return c ? COLOURS[Math.floor(c / 10)] : "#fff";
   }
 }
 
@@ -96,3 +97,5 @@ const GEOJSON_DEFAULTS: L.PathOptions = {
   weight: 2,
   className: "geo-path"
 };
+
+const COLOURS = ["#f0f9e8", "#bae4bc", "#7bccc4", "#43a2ca", "#0868ac"];
