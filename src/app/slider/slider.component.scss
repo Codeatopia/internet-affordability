@@ -1,3 +1,5 @@
+@import "src/styles.scss";
+
 #sliderContainer {
   width: 80%;
   margin: auto;
@@ -22,16 +24,24 @@
   position: relative;
 }
 .marker-tick {
-  width: 4px;
-  margin-left: -2px;
-  background: #727272;
-  color: #727272;
+  width: 2px;
+  margin-left: -1px;
+  top: 18px;
+  height: 12px;
+  background: color($dark);
+  color: color($dark);
 }
 .marker-label {
   width: 50px;
   text-align: center;
   margin-left: -25px;
-  top: -40px;
+  top: -20px;
+}
+.marker[data-selected="true"] {
+  color: color($primary);
+}
+.marker-tick[data-selected="true"] {
+  background: color($primary);
 }
 
 @media only screen and (max-width: 500px) {

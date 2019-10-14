@@ -1,18 +1,15 @@
 <div id="sliderContainer">
   <div id="sliderLegend">
-    <div *ngFor="let marker of markers" class="marker">
-      <div
-        class="marker-tick"
-        [style.left]="(100 * marker) / sliderOptions.max + '%'"
-      >
-        .
+    <div
+      *ngFor="let marker of markers"
+      class="marker"
+      [style.left]="(100 * marker) / sliderOptions.max + '%'"
+      [attr.data-selected]="sliderValue === marker"
+    >
+      <div class="marker-tick" [attr.data-selected]="sliderValue === marker">
+        <span style="visibility: hidden">.</span>
       </div>
-      <div
-        class="marker-label"
-        [ngStyle]="{ left: (100 * marker) / sliderOptions.max + '%' }"
-      >
-        ${{ marker }}
-      </div>
+      <div class="marker-label">${{ marker }}</div>
     </div>
   </div>
   <mat-slider
