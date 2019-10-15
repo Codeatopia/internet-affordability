@@ -1,8 +1,11 @@
 <div class="page">
-  <app-slider (onChange)="sliderValueChanged($event)"></app-slider>
+  <app-slider
+    [markers]="sliderMarkers"
+    (onChange)="sliderValueChanged($event)"
+  ></app-slider>
   <h1 class="map-title">
     Where 1GB of Internet costs up to
     <span class="variable" *ngIf="sliderValue > 0">${{ sliderValue }}</span>
   </h1>
-  <app-map></app-map>
+  <app-map [colours]="dataGroupings"></app-map>
 </div>

@@ -6,6 +6,9 @@
 .leaflet-container {
   background: color($light, 500);
 }
+.leaflet-interactive {
+  cursor: crosshair;
+}
 $outline1: #b5b5b5;
 $outline2: #b5b5b5;
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
 import { MatSliderChange, MatSlider } from "@angular/material/slider";
 
 @Component({
@@ -9,9 +9,9 @@ import { MatSliderChange, MatSlider } from "@angular/material/slider";
 export class SliderComponent implements OnInit {
   @Output() onChange = new EventEmitter<number>();
   // markers to show above slider
-  markers = [1, 5, 10, 20, 75];
+  @Input() markers: number[] = [];
   sliderOptions: Partial<MatSlider> = {
-    max: 75,
+    max: 76,
     min: 0,
     value: 0,
     step: 1,
