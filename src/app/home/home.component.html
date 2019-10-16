@@ -1,4 +1,4 @@
-<div class="page">
+<div class="page" *ngIf="showVis == 'price'">
   <h1 class="map-title">
     Cost of Internet
   </h1>
@@ -7,8 +7,24 @@
   </h4>
   <app-slider
     style="margin-bottom:2em"
-    [markers]="sliderMarkers"
+    [markers]="markers"
     (onChange)="sliderValueChanged($event)"
   ></app-slider>
-  <app-map [colours]="dataGroupings" [features]="mapFeatures"></app-map>
+  <app-map [features]="mapFeatures"></app-map>
+</div>
+
+<div class="page" *ngIf="showVis == 'time'">
+  <h1 class="map-title">
+    Cost of Internet
+  </h1>
+  <h4 class="map-subtitle">
+    Time-equivalent of 1GB bundle around the world
+  </h4>
+  <app-slider
+    style="margin-bottom:2em"
+    [markers]="markers"
+    (onChange)="sliderValueChanged($event)"
+    [options]="sliderOptions"
+  ></app-slider>
+  <app-map [features]="mapFeatures"></app-map>
 </div>

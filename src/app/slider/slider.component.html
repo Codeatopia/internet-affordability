@@ -15,10 +15,13 @@
       </div>
       <div
         class="marker-label"
-        [style.background]="markers[i].background"
-        [style.color]="markers[i].color"
+        [style.visibility]="marker.hideLabel ? 'hidden' : 'visible'"
       >
-        ${{ marker.value }}
+        <span
+          [style.background]="markers[i].background"
+          [style.color]="markers[i].color"
+          >{{ marker.label }}</span
+        >
       </div>
     </div>
   </div>

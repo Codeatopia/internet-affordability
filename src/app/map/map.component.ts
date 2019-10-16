@@ -11,10 +11,8 @@ export interface IMapFeature {
   ADM0_A3: string;
   background: string;
   popup?: HTMLElement | string;
+  tooltip?: HTMLElement | string;
   data: any;
-}
-interface IColourBoundaries {
-  [value: number]: string;
 }
 
 @Component({
@@ -23,11 +21,6 @@ interface IColourBoundaries {
   styleUrls: ["./map.component.scss"]
 })
 export class MapComponent {
-  /**
-   * @param colours - specify specific value:colorString pairs to use
-   * for grouping features by a specific colour
-   */
-  @Input() colours: IColourBoundaries = { [Infinity]: "#fff" };
   @Input() set features(features: IMapFeature[]) {
     this._features = features;
     if (this.map) {
@@ -58,7 +51,6 @@ export class MapComponent {
     this.baseLayer = L.geoJSON(this.geoJsonData, {
       style: GEOJSON_DEFAULTS
     });
-    console.log("geojson", this.geoJsonData);
     this.baseLayer.addTo(this.map);
   }
 
@@ -67,7 +59,6 @@ export class MapComponent {
     if (this.featureLayer) {
       this.featureLayer.removeFrom(this.map);
     }
-    console.log("loading feature map", this._features);
     // organise features by country code for quicker lookup
     const featuresJson: { [key: string]: IMapFeature } = {};
     this._features.forEach(f => (featuresJson[f.ADM0_A3] = f));
@@ -77,16 +68,22 @@ export class MapComponent {
       },
       onEachFeature: (feature, layer) => {
         // merge with feature data
-        const data = featuresJson[feature.properties.ADM0_A3];
-        if (data) {
+        const f = featuresJson[feature.properties.ADM0_A3];
+        if (f) {
           layer.on({
             mouseover: e => this._onLayerHoverIn(e.target),
             mouseout: e => this._onLayerHoverOut(e.target),
             click: e => this._onLayerClick(e.target)
           });
-          if (data.popup) {
-            layer.bindPopup(data.popup, {
+
+          if (f.popup) {
+            layer.bindPopup(f.popup, {
               className: "popup-container"
+            });
+          }
+          if (f.tooltip) {
+            layer.bindTooltip(f.tooltip, {
+              className: "map-tooltip"
             });
           }
         }
@@ -113,17 +110,14 @@ export class MapComponent {
   }
 
   private _onLayerClick(feature: L.GeoJSON) {
-    console.log("feature", feature);
     feature.setStyle({
       // fillColor: "blue"
     });
-    // const popup = L.popup().setLatLng(feature.)
-    // this.map.openPopup()
   }
   private _onLayerHoverIn(feature: L.GeoJSON) {
     feature.setStyle({
-      weight: 5,
-      color: "#666",
+      // weight: 2,
+      // color: "black",
       dashArray: "",
       fillOpacity: 0.7
     });
@@ -134,15 +128,8 @@ export class MapComponent {
   private _setStyle(feature: IMapFeature) {
     return {
       ...GEOJSON_DEFAULTS,
-      fillColor: this._getFillColor(feature.data.Cost)
+      fillColor: feature.background
     };
-  }
-
-  private _getFillColor(c: number) {
-    // iterate over list of available colours and return first
-    // that is larger than supplied number (upper limit)
-    const upperBoundColour = Object.keys(this.colours).find(v => Number(v) > c);
-    return upperBoundColour ? this.colours[Number(upperBoundColour)] : "#fff";
   }
 }
 

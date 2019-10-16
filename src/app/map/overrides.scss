@@ -25,6 +25,16 @@
 .leaflet-popup-tip {
   background: color($dark) !important;
 }
+.leaflet-tooltip.map-tooltip {
+  background: color($dark);
+  color: white;
+  padding: 5px;
+  border: none;
+  font-weight: bold;
+}
+.leaflet-tooltip.map-tooltip:before {
+  border-left-color: transparent;
+}
 
 // override leaflet styles
 
