@@ -172,7 +172,7 @@ export default [
   { "Alpha-3": "GUY", Name: "Guyana", Cost: 7.24, GDP: 4635 },
   {
     "Alpha-3": "COD",
-    Name: "Congo (Democratic Republic of)",
+    Name: "Congo (DRC)",
     Cost: 0.88,
     GDP: 562
   },

@@ -84,9 +84,14 @@ export class HomeComponent {
     `;
   }
   _getTooltip(data: IData) {
-    return `
+    return this.showVis === "price"
+      ? `
       <div>${data.Name}</div>
       <div>$${data.Cost}</div>
+    `
+      : `
+      <div>${data.Name}</div>
+      <div>${simplifyTime(data.Time.mins)}</div>
     `;
   }
 
