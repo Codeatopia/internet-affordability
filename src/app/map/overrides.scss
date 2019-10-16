@@ -1,0 +1,38 @@
+// NOTE - unknown reason but can't modify some popup styles from within map component scss
+// so placed here and imported from styles.scss until fix found
+.popup-container {
+  background: color($dark);
+  border-radius: 2px;
+  color: white;
+  padding: 5px;
+  width: 130px;
+}
+.popup-content {
+  height: 110px;
+  margin-top: 1em;
+}
+.popup-title {
+  margin-right: 20px;
+  font-weight: bold;
+  height: 3em;
+  line-height: 1.5em;
+  border-bottom: 1px solid color($light);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  color: color($tertiary);
+}
+.leaflet-popup-tip {
+  background: color($dark) !important;
+}
+
+// override leaflet styles
+
+.leaflet-popup-content {
+  margin: unset !important;
+}
+.leaflet-popup-content-wrapper {
+  background: unset !important;
+  border-radius: unset !important;
+  color: unset !important;
+}

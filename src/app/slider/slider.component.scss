@@ -7,7 +7,7 @@
 #slider {
   width: 100%;
   padding: 0;
-  margin-top: 30px;
+  margin-bottom: 10px;
 }
 #sliderLegend {
   // slider is naturally offset 8px so adjust label
@@ -15,7 +15,6 @@
   position: relative;
 }
 .marker {
-  margin-top: 30px;
   position: absolute;
   width: 100%;
 }
@@ -32,13 +31,14 @@
   color: color($dark);
 }
 .marker-label {
-  width: 50px;
+  width: 30px;
   text-align: center;
-  margin-left: -25px;
-  top: -20px;
+  margin-left: -15px;
+  bottom: -20px;
+  border-radius: 4px;
 }
 .marker[data-selected="true"] {
-  color: color($primary);
+  // color: color($primary);
 }
 .marker-tick[data-selected="true"] {
   background: color($primary);

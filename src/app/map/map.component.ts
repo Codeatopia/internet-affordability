@@ -31,6 +31,7 @@ interface IColourBoundaries {
 })
 export class MapComponent {
   @Input() colours: IColourBoundaries = { [Infinity]: "#fff" };
+  @Input() mapData: any;
   data: { [key: string]: IMapData } = DATA;
   options = {
     layers: [],
@@ -60,11 +61,29 @@ export class MapComponent {
     });
     this.geoJson = L.geoJSON(worldGeoJson, {
       onEachFeature: (feature, layer) => {
+        const f = feature as IFeatureWithData;
+        const data = f.data;
         layer.on({
           mouseover: e => this._onLayerHoverIn(e.target),
           mouseout: e => this._onLayerHoverOut(e.target),
           click: e => this._onLayerClick(e.target)
         });
+        layer.bindPopup(
+          `
+        <div class="popup-title" >${data.Name}</div>
+        <div class="popup-content" >
+          <p>1GB data costs <span class="variable">$${data.Cost}</p>
+          <p>This is comparable to <span class="variable">${this._calcWorkEquivalent(
+            data.Cost,
+            data.GDP
+          )}</span> of work</p>
+        </div>
+        
+        `,
+          {
+            className: "popup-container"
+          }
+        );
       },
       style: feature => this._setStyle(feature as IFeatureWithData)
     });
@@ -72,9 +91,12 @@ export class MapComponent {
   }
 
   private _onLayerClick(feature: L.GeoJSON) {
+    console.log("feature", feature);
     feature.setStyle({
-      fillColor: "blue"
+      // fillColor: "blue"
     });
+    // const popup = L.popup().setLatLng(feature.)
+    // this.map.openPopup()
   }
   private _onLayerHoverIn(feature: L.GeoJSON) {
     feature.setStyle({
@@ -88,7 +110,6 @@ export class MapComponent {
     this.geoJson.resetStyle(feature);
   }
   private _setStyle(feature: IFeatureWithData) {
-    console.log("setting style", feature);
     return {
       ...GEOJSON_DEFAULTS,
       fillColor: this._getFillColor(feature.data.Cost)
@@ -99,15 +120,29 @@ export class MapComponent {
     // iterate over list of available colours and return first
     // that is larger than supplied number (upper limit)
     const upperBoundColour = Object.keys(this.colours).find(v => Number(v) > c);
-    console.log("upper bound colour", upperBoundColour);
     return upperBoundColour ? this.colours[Number(upperBoundColour)] : "#fff";
+  }
+
+  /**************************************************************************************
+   *  Specific affordability methods to be moved
+   **************************************************************************************/
+  private _calcWorkEquivalent(cost?: number, gdp?: number) {
+    if (cost && gdp) {
+      const workMins = Math.round((cost / gdp) * annualWorkMins);
+      const workHours = Math.round((workMins / 60) * 10) / 10;
+      const workDays = Math.round((workHours / 7) * 10) / 10;
+      return workMins < 60
+        ? `${workMins} minutes`
+        : workHours < 7
+        ? `${workHours} hours`
+        : `${workDays} days`;
+    }
+    return "N/A";
   }
 }
 
-interface IFeatureProperties {
-  cost: number;
-  selected: boolean;
-}
+// rought estimate - 60 mins per hour, 40 hours per week, 50 weeks per year
+const annualWorkMins = 60 * 40 * 50;
 
 const GEOJSON_DEFAULTS: L.PathOptions = {
   fillOpacity: 1,

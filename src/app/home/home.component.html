@@ -1,11 +1,14 @@
 <div class="page">
+  <h1 class="map-title">
+    Cost of Internet
+  </h1>
+  <h4 class="map-subtitle">
+    Price of 1GB bundle around the world
+  </h4>
   <app-slider
+    style="margin-bottom:2em"
     [markers]="sliderMarkers"
     (onChange)="sliderValueChanged($event)"
   ></app-slider>
-  <h1 class="map-title">
-    Where 1GB of Internet costs up to
-    <span class="variable" *ngIf="sliderValue > 0">${{ sliderValue }}</span>
-  </h1>
   <app-map [colours]="dataGroupings"></app-map>
 </div>
