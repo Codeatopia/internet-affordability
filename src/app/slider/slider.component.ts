@@ -26,6 +26,7 @@ export class SliderComponent {
   @Input() options: Partial<MatSlider>;
   @ViewChild("slider", { static: true }) slider: MatSlider;
   sliderOptions: Partial<MatSlider>;
+  sliderValue: number;
 
   ngOnInit() {
     this.sliderOptions = { ...SLIDER_DEFAULTS, ...this.options };
@@ -33,6 +34,7 @@ export class SliderComponent {
       m.label = this.sliderOptions.displayWith(m.value);
       return m;
     });
+    console.log("options", this.sliderOptions);
   }
 
   onSliderChange(e: MatSliderChange) {
@@ -40,6 +42,7 @@ export class SliderComponent {
     // setTimeout(() => {
     //   this.slider.blur();
     // }, 200);
+    this.sliderValue = e.value;
     this.onChange.next(e.value);
   }
 
@@ -54,5 +57,6 @@ const SLIDER_DEFAULTS: Partial<MatSlider> = {
   value: 0,
   step: 1,
   thumbLabel: true,
-  displayWith: v => v
+  // TODO - fix why default blocks price display
+  displayWith: v => `$${v}`
 };

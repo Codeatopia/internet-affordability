@@ -1,4 +1,4 @@
-<div class="page" *ngIf="showVis == 'price'">
+<div class="page" *ngIf="activeVis == 'price'">
   <h1 class="map-title">
     Cost of Internet
   </h1>
@@ -13,7 +13,7 @@
   <app-map [features]="mapFeatures"></app-map>
 </div>
 
-<div class="page" *ngIf="showVis == 'time'">
+<div class="page" *ngIf="activeVis == 'time'">
   <h1 class="map-title">
     Cost of Internet
   </h1>

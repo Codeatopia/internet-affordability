@@ -3,6 +3,7 @@ import { ISliderMarker } from "../slider/slider.component";
 import DATA from "src/assets/data/gbCost";
 import { IMapFeature } from "../map/map.component";
 import { MatSlider } from "@angular/material/slider";
+import { ActivatedRoute } from "@angular/router";
 
 type IVisType = "price" | "time";
 @Component({
@@ -11,17 +12,21 @@ type IVisType = "price" | "time";
   styleUrls: ["./home.component.scss"]
 })
 export class HomeComponent {
-  showVis: IVisType = "time";
+  activeVis: IVisType;
   data: IData[];
   sliderValue: number;
   markers = PRICE_MARKERS;
   mapFeatures: IMapFeature[] = [];
   sliderOptions: Partial<MatSlider>;
-  constructor() {
-    this.prepareData(this.showVis);
-    this.markers = this.showVis === "price" ? PRICE_MARKERS : TIME_MARKERS;
+  constructor(route: ActivatedRoute) {
+    //  TODO - add better route binding
+    this.activeVis = route.snapshot.routeConfig.path as IVisType;
+    console.log("active vis", this.activeVis);
+    console.log("activeVis", this.activeVis);
+    this.prepareData(this.activeVis);
+    this.markers = this.activeVis === "price" ? PRICE_MARKERS : TIME_MARKERS;
     this.sliderOptions =
-      this.showVis === "price" ? PRICE_OPTIONS : TIME_OPTIONS;
+      this.activeVis === "price" ? PRICE_OPTIONS : TIME_OPTIONS;
   }
 
   // process raw data to calculate work time equivalent for time vis
@@ -84,7 +89,7 @@ export class HomeComponent {
       : `Data not available`;
   }
   _getTooltip(data: IData) {
-    return this.showVis === "price"
+    return this.activeVis === "price"
       ? `
       <div>${data.Name}</div>
       <div>$${data.Cost}</div>
@@ -124,6 +129,9 @@ const simplifyTime = (v: number) => {
     : // weeks
       `${Math.round((v / 2400) * 10) / 10}w`;
 };
+const formatPrice = (v: number) => {
+  return "$" + v;
+};
 
 /**************************************************************************************
  *  Variables and Interfaces
@@ -138,33 +146,35 @@ const PRICE_OPTIONS: Partial<MatSlider> = {
   min: 0,
   value: 0,
   step: 1,
-  displayWith: (v: number) => `$${v}`
+  displayWith: (v: number) => {
+    return formatPrice(v);
+  }
 };
 // Color scale generator: https://observablehq.com/@shastabolicious/two-hue-sequential-color-scale
 const PRICE_MARKERS: ISliderMarker[] = [
   {
     value: 1,
-    background: "#f0f9e8",
+    background: "#bad2f5",
     color: "#616161"
   },
   {
     value: 5,
-    background: "#bae4bc",
+    background: "#74a8cc",
     color: "#fff"
   },
   {
     value: 10,
-    background: "#7bccc4",
+    background: "#40808c",
     color: "#fff"
   },
   {
     value: 20,
-    background: "#43a2ca",
+    background: "#245651",
     color: "#fff"
   },
   {
     value: 76,
-    background: "#0868ac",
+    background: "#152e25",
     color: "#fff"
   }
 ];
@@ -172,28 +182,28 @@ const PRICE_MARKERS: ISliderMarker[] = [
 const TIME_MARKERS: ISliderMarker[] = [
   {
     value: 10,
-    background: "#f0f9e8",
+    background: "#dec7f6",
     color: "#616161"
     // hideLabel: true
   },
   {
     value: 60,
-    background: "#bae4bc",
+    background: "#bc93ce",
     color: "#fff"
   },
   {
     value: 480,
-    background: "#7bccc4",
+    background: "#966a86",
     color: "#fff"
   },
   {
     value: 960,
-    background: "#43a2ca",
+    background: "#65483e",
     color: "#fff"
   },
   {
     value: 2400,
-    background: "#0868ac",
+    background: "#332717",
     color: "#fff"
   }
   // {
