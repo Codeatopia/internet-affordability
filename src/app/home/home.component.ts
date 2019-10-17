@@ -18,29 +18,22 @@ export class HomeComponent {
   mapFeatures: IMapFeature[] = [];
   sliderOptions: Partial<MatSlider>;
   constructor() {
-    this.prepareData();
+    this.prepareData(this.showVis);
     this.markers = this.showVis === "price" ? PRICE_MARKERS : TIME_MARKERS;
     this.sliderOptions =
       this.showVis === "price" ? PRICE_OPTIONS : TIME_OPTIONS;
   }
 
   // process raw data to calculate work time equivalent for time vis
-  /*  Assumptions
-      av hours worked per day = 8
-      av days worked per year = 250 (50 weeks work, 2 weeks holiday)
-  */
-  prepareData() {
-    const annualDays = 250;
-    const dailyHours = 8;
+  prepareData(type: IVisType) {
     this.data = DATA.map(d => {
       const gdpCost = d.Cost / d.GDP;
+      const timeValue = gdpCost * ANNUAL_WORK_MINS;
       const processed: IData = {
         ...d,
-        Time: {
-          days: gdpCost * annualDays,
-          hours: gdpCost * annualDays * dailyHours,
-          mins: gdpCost * annualDays * dailyHours * 60
-        }
+        Time: timeValue,
+        // set the main variable now to avoid lots of future if/switch statements
+        activeValue: type === "price" ? d.Cost : timeValue
       };
       return processed;
     });
@@ -53,9 +46,13 @@ export class HomeComponent {
   }
 
   filterData(value: number) {
-    return this.showVis === "price"
-      ? this.data.filter(d => d.Cost < value)
-      : this.data.filter(d => d.Time.mins < value);
+    // don't filter if at max
+    const maxFilter = this.markers[this.markers.length - 1].value;
+    if (value === maxFilter) {
+      value = Infinity;
+    }
+    // filter on active variable (display value)
+    return this.data.filter(d => d.activeValue < value);
   }
 
   addMapFeatures(dataFeatures: IData[]) {
@@ -72,16 +69,19 @@ export class HomeComponent {
   }
 
   _getPopup(data: IData) {
-    return `
+    return data.Cost && data.Time
+      ? `
     <div class="popup-title" >${data.Name}</div>
     <div class="popup-content" >
       <p>1GB data costs <span class="variable">$${data.Cost}</p>
-      <p>This is comparable to <span class="variable">${this._calcWorkEquivalent(
-        data.Cost,
+      <p>The average income is $${
         data.GDP
-      )}</span> of work</p>
+      } per year, so this is comparable to <span class="variable">${simplifyTime(
+          data.Time
+        )}</span> of work</p>
     </div>
-    `;
+    `
+      : `Data not available`;
   }
   _getTooltip(data: IData) {
     return this.showVis === "price"
@@ -91,44 +91,47 @@ export class HomeComponent {
     `
       : `
       <div>${data.Name}</div>
-      <div>${simplifyTime(data.Time.mins)}</div>
+      <div>${simplifyTime(data.Time)}</div>
     `;
   }
 
   private _getFillColor(d: IData) {
     // iterate over list of available colours and return first
     // that is larger than supplied number (upper limit)
-    if (this.showVis === "price" && d.Cost) {
-      const grouping = this.markers.find(el => el.value > d.Cost);
-      return grouping.background;
-    }
-    if (this.showVis === "time" && d.Time) {
-      const grouping = this.markers.find(el => el.value > d.Time.mins);
-      return grouping.background;
+    if (d.activeValue) {
+      const grouping = this.markers.find(el => el.value > d.activeValue);
+      // provide fallback in case including data beyond current groups
+      return grouping ? grouping.background : "#636363";
     }
     return "#fff";
   }
-
-  /**************************************************************************************
-   *  Specific affordability methods to be moved
-   **************************************************************************************/
-  private _calcWorkEquivalent(cost?: number, gdp?: number) {
-    if (cost && gdp) {
-      const workMins = Math.round((cost / gdp) * annualWorkMins);
-      const workHours = Math.round((workMins / 60) * 10) / 10;
-      const workDays = Math.round((workHours / 7) * 10) / 10;
-      return workMins < 60
-        ? `${workMins} minutes`
-        : workHours < 7
-        ? `${workHours} hours`
-        : `${workDays} days`;
-    }
-    return "N/A";
-  }
 }
 
-// rought estimate - 60 mins per hour, 40 hours per week, 50 weeks per year
-const annualWorkMins = 60 * 40 * 50;
+/**************************************************************************************
+ *  Time display methods
+ **************************************************************************************/
+// convert time in minutes to nearest quantifier
+const simplifyTime = (v: number) => {
+  // minutes
+  return v < 60
+    ? `${Math.round(v)}m`
+    : // hours
+    v < 480
+    ? `${Math.round(v / 60)}h`
+    : // days
+    v < 2400
+    ? `${Math.round((v / 480) * 10) / 10}d`
+    : // weeks
+      `${Math.round((v / 2400) * 10) / 10}w`;
+};
+
+/**************************************************************************************
+ *  Variables and Interfaces
+ **************************************************************************************/
+
+// Assumptions for time spent working
+// 60 mins per hour, 40 hours per week, 50 weeks per year
+const ANNUAL_WORK_MINS = 60 * 40 * 50;
 
 const PRICE_OPTIONS: Partial<MatSlider> = {
   max: 76,
@@ -137,18 +140,6 @@ const PRICE_OPTIONS: Partial<MatSlider> = {
   step: 1,
   displayWith: (v: number) => `$${v}`
 };
-
-// convert time in minutes to nearest quantifier
-function simplifyTime(v: number) {
-  // minutes
-  return v < 60
-    ? `${Math.round(v)}m`
-    : // hours
-    v < 480
-    ? `${Math.round(v / 60)}h`
-    : // days
-      `${Math.round((v / 480) * 10) / 10}d`;
-}
 
 const PRICE_MARKERS: ISliderMarker[] = [
   {
@@ -201,10 +192,15 @@ const TIME_MARKERS: ISliderMarker[] = [
     color: "#fff"
   },
   {
-    value: 4350,
+    value: 2400,
     background: "#0868ac",
     color: "#fff"
   }
+  // {
+  //   value: 4350,
+  //   background: "#0868ac",
+  //   color: "#fff"
+  // }
 ];
 const TIME_OPTIONS: Partial<MatSlider> = {
   max: TIME_MARKERS[TIME_MARKERS.length - 1].value,
@@ -217,12 +213,10 @@ const TIME_OPTIONS: Partial<MatSlider> = {
 };
 
 interface IData {
+  activeValue: number;
   Cost?: number;
   GDP?: number;
-  Time?: {
-    mins: number;
-    hours: number;
-    days: number;
-  };
+  // time measured in minutes
+  Time?: number;
   Name?: string;
 }
