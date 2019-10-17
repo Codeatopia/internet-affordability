@@ -140,7 +140,7 @@ const PRICE_OPTIONS: Partial<MatSlider> = {
   step: 1,
   displayWith: (v: number) => `$${v}`
 };
-
+// Color scale generator: https://observablehq.com/@shastabolicious/two-hue-sequential-color-scale
 const PRICE_MARKERS: ISliderMarker[] = [
   {
     value: 1,
