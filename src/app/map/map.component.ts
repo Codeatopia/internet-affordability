@@ -121,9 +121,11 @@ export class MapComponent {
       dashArray: "",
       fillOpacity: 0.7
     });
+    feature.openPopup();
   }
   private _onLayerHoverOut(feature: L.GeoJSON) {
     this.featureLayer.resetStyle(feature);
+    feature.closePopup();
   }
   private _setStyle(feature: IMapFeature) {
     return {

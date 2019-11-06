@@ -7,20 +7,23 @@
   padding: 5px;
   width: 130px;
 }
-.popup-content {
-  height: 110px;
-  margin-top: 1em;
-}
+
 .popup-title {
   margin-right: 20px;
   font-weight: bold;
   height: 3em;
   line-height: 1.5em;
-  border-bottom: 1px solid color($light);
+  // border-bottom: 1px solid color($light);
   overflow: hidden;
   display: flex;
   align-items: center;
   color: color($tertiary);
+}
+.popup-text-variable {
+  border: 1px solid white;
+  padding: 2px;
+  margin: 5px 0;
+  font-size: 14px;
 }
 .leaflet-popup-tip {
   background: color($dark) !important;
@@ -31,6 +34,10 @@
   padding: 5px;
   border: none;
   font-weight: bold;
+  white-space: normal !important;
+}
+.leaflet-tooltip {
+  white-space: normal !important;
 }
 .leaflet-tooltip.map-tooltip:before {
   border-left-color: transparent;

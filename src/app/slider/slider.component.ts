@@ -8,6 +8,7 @@ import {
 import { MatSliderChange, MatSlider } from "@angular/material/slider";
 
 export interface ISliderMarker {
+  index: number;
   value: number;
   color: string;
   background: string;
@@ -28,20 +29,21 @@ export class SliderComponent {
   sliderOptions: Partial<MatSlider>;
   sliderValue: number;
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.sliderInit();
+  }
+
+  sliderInit() {
     this.sliderOptions = { ...SLIDER_DEFAULTS, ...this.options };
     this.markers = this.markers.map(m => {
       m.label = this.sliderOptions.displayWith(m.value);
       return m;
     });
-    console.log("options", this.sliderOptions);
+    // initialise slider on max value
+    this.sliderValue = this.markers[this.markers.length - 1].value;
   }
 
   onSliderChange(e: MatSliderChange) {
-    // force blur to hide thumb
-    // setTimeout(() => {
-    //   this.slider.blur();
-    // }, 200);
     this.sliderValue = e.value;
     this.onChange.next(e.value);
   }
@@ -57,6 +59,6 @@ const SLIDER_DEFAULTS: Partial<MatSlider> = {
   value: 0,
   step: 1,
   thumbLabel: true,
-  // TODO - fix why default blocks price display
+  // TODO - fix why default blocks cost display
   displayWith: v => `$${v}`
 };
