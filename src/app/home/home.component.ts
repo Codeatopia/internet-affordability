@@ -3,6 +3,7 @@ import { ISliderMarker } from "../slider/slider.component";
 import DATA from "src/assets/data/gbCost";
 import { IMapFeature } from "../map/map.component";
 import { MatSlider } from "@angular/material/slider";
+import { hslToRgb } from "src/utils/colorUtils";
 
 type IVisType = "cost" | "time";
 
@@ -14,6 +15,7 @@ type IVisType = "cost" | "time";
 export class HomeComponent {
   activeVis: IVisType = "time";
   data: IData[];
+  dataRange: { min: number; max: number; range: number };
   sliderValue: { [key in IVisType]: number } = {
     cost: Infinity,
     time: Infinity
@@ -41,8 +43,12 @@ export class HomeComponent {
     this.init(nextVis);
   }
 
-  // process raw data to calculate work time equivalent for time vis
+  // process raw data to calculate work time equivalent for time vis. Also track min/max values
   prepareData(type: IVisType) {
+    let dataRange = {
+      min: Infinity,
+      max: -Infinity
+    };
     this.data = DATA.map(d => {
       const gdpCost = d.Cost / d.GDP;
       const timeValue = gdpCost * ANNUAL_WORK_MINS;
@@ -52,8 +58,13 @@ export class HomeComponent {
         // set the main variable now to avoid lots of future if/switch statements
         activeValue: type === "cost" ? d.Cost : timeValue
       };
+      dataRange = {
+        min: Math.min(dataRange.min, processed.activeValue),
+        max: Math.max(dataRange.max, processed.activeValue)
+      };
       return processed;
     });
+    this.dataRange = { ...dataRange, range: dataRange.max - dataRange.min };
   }
   sliderValueChanged(value: number, vis: IVisType) {
     // ignore duplicate fire on init
@@ -249,4 +260,31 @@ interface IData {
   // time measured in minutes
   Time?: number;
   Name?: string;
+}
+
+/*********************************************************************************
+ * Deprecated
+
+ **************************************************************************************/
+
+/**
+ * Generate a linear gradient colour scheme from min to max value
+ * @deprecated - Not distinctive enough for data (extreme values scale too far and so
+ * most of data appears similar colour in middle of range. Would need to find better way
+ * to group/bucket)
+ * @param d
+ */
+function _getFillColor(d: IData) {
+  const baseColor = {
+    h: this.activeVis === "cost" ? 216 : 269,
+    s: 0.75,
+    l: 0.85
+  };
+  const { min, range } = this.dataRange;
+  // we want to generate a number for l from 0.25 - 0.85 depending on the value
+  const relativeL = baseColor.l - (0.85 * (d.activeValue - min)) / range;
+  const newColor = { ...baseColor, l: Math.round(relativeL * 100) / 100 };
+  const { h, s, l } = newColor;
+  const rgb = hslToRgb(h / 360, s, l);
+  return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
 }
