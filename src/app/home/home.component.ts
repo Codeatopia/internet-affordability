@@ -234,11 +234,11 @@ const MARKERS: { [key in IVisType]: ISliderMarker[] } = {
 const HEADINGS = {
   cost: {
     titleVar: "Cost",
-    subtitle: "Cost of 1GB bundle around the world"
+    subtitle: "Price of 1GB bundle"
   },
   time: {
     titleVar: "Affordability",
-    subtitle: "Time-equivalent of 1GB bundle around the world"
+    subtitle: "Time worked for 1GB bundle"
   }
 };
 

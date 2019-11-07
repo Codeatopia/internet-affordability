@@ -102,22 +102,14 @@ export class MapComponent {
       worldTopojson,
       worldTopojson.objects.countries
     );
-    // merge data with country geojson
-    // worldGeoJson.features.map((f: IFeatureWithData) => {
-    //   f.data = { ...this.data[f.properties.ADM0_A3] };
-    // });
     this.geoJsonData = worldGeoJson;
   }
 
   private _onLayerClick(feature: L.GeoJSON) {
-    feature.setStyle({
-      // fillColor: "blue"
-    });
+    feature.openTooltip();
   }
   private _onLayerHoverIn(feature: L.GeoJSON) {
     feature.setStyle({
-      // weight: 2,
-      // color: "black",
       dashArray: "",
       fillOpacity: 0.7
     });
