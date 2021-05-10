@@ -232,13 +232,6 @@
     "@schematics/angular" "8.3.2"
     parse5-html-rewriting-stream "5.1.0"
 
-"@angular/router@~8.2.4":
-  version "8.2.4"
-  resolved "https://registry.yarnpkg.com/@angular/router/-/router-8.2.4.tgz#035b4e8e3de03214ee46b6808175b51f25f6eb41"
-  integrity sha512-ZJwsztlD1vbb2HF9SgvHfpIK82BkOlDP2OmdZZavnxV7RstbU5hUkJ4lB4JB/EN9B76djo117CwOxxIveOhJMQ==
-  dependencies:
-    tslib "^1.9.0"
-
 "@angular/service-worker@~8.2.4":
   version "8.2.4"
   resolved "https://registry.yarnpkg.com/@angular/service-worker/-/service-worker-8.2.4.tgz#6a523fac1ac6bf3f9a2a177f0f89da709ae1e359"
@@ -4837,9 +4830,9 @@ lodash.clonedeep@^4.5.0:
   integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
 
 lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.17.5:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 log4js@^4.0.0:
   version "4.5.1"
